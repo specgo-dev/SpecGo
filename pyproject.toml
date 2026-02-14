@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SpecGo"
+version = "0.0.1"
+description = "CLI-first spec-to-API agent for embedded protocols."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Ce Xu" }
+]
+dependencies = [
+  "typer>=0.12.0",
+  "pyyaml>=6.0",
+  "pydantic>=2.0",
+  "cantools>=39.0",
+  "jinja2>=3.1.2",
+]
+
+[tool.setuptools]
+packages = ["specgo"]
+
+[project.scripts]
+specgo = "specgo.__main__:run"
