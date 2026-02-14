@@ -134,7 +134,8 @@ def _compile_shared_library(
             "/WX",
             str(source_path),
             f"/I{include_dir}",
-            f"/Fe:{output_path}",
+            "/link",
+            f"/OUT:{output_path}",
         ]
         proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
         if proc.returncode == 0:

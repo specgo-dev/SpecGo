@@ -52,6 +52,17 @@ Protocol implementations (encoder/decoder, bit packing, endianness) are error-pr
 | Agent pipeline orchestration (LLM-assisted) | Planned |
 | Differential testing (`test-diff`) | Planned |
 
+## Update Log
+
+### v1.0.0 (2026-02-14) - First Stable Release
+
+- First public stable release of SpecGo.
+- End-to-end deterministic pipeline available: `ing` -> `val` -> `gen` -> `gate` -> `rt`.
+- DBC ingest, IR schema/semantic validation, C protocol codegen, and codegen gates are production-ready.
+- Seeded raw roundtrip property testing and YAML report output are included by default.
+- Workspace bootstrap (`start`) and scoped config (`config`, `-g config`) are available.
+- LLM/Agent config fields are reserved for future integration; advanced LLM-assisted flow is still planned.
+
 ## Quickstart
 
 ```bash
@@ -74,29 +85,29 @@ specgo start
 ### 2) Ingest spec file to IR
 
 ```bash
-# input: yourdbc .dbc
+# input: your .dbc
 # output: specgo_output/output/<name>.ir.yaml
-specgo ing path/to/yourdbc.dbc -f
+specgo ing path/to/your.dbc -f
 ```
 
 ### 3) Validate IR (Layer 0 + Layer 1)
 
 ```bash
 # output: <ir>.validation.yaml
-specgo val specgo_output/output/yourdbc.ir.yaml
+specgo val specgo_output/output/your.ir.yaml
 ```
 
 ### 4) Generate protocol C/H
 
 ```bash
 # output: specgo_output/gen/<name>_protocol.c/.h
-specgo gen specgo_output/output/yourdbc.ir.yaml
+specgo gen specgo_output/output/your.ir.yaml
 ```
 
 ### 5) Run codegen gate (determinism + file checks + compile syntax)
 
 ```bash
-specgo gate specgo_output/output/yourdbc.ir.yaml
+specgo gate specgo_output/output/your.ir.yaml
 ```
 
 ### 6) Run seeded roundtrip tests (raw encode/decode checks)
@@ -115,6 +126,41 @@ specgo diff
 ```
 
 Recommended order summary: `start` → `ing` → `val` → `gen` → `gate` → `rt` → `diff(planned)`
+
+## Verifiable Templates
+
+The `examples/` folder provides sanitized verification templates for quick checks.
+
+### 1) Valid DBC (ingest + validate should pass)
+
+```bash
+specgo ing examples/template_valid_sanitized.dbc -f
+specgo val specgo_output/output/template_valid_sanitized.ir.yaml
+```
+
+### 2) Semantic-fail DBC (validate should fail by design)
+
+```bash
+specgo ing examples/template_invalid_semantic_sanitized.dbc -f
+specgo val specgo_output/output/template_invalid_semantic_sanitized.ir.yaml
+```
+
+Expected failure reason: Layer-1 semantic check reports `scale is 0`.
+
+### 3) Roundtrip mismatch demo (encode/decode intentionally inconsistent)
+
+```bash
+specgo ing examples/template_roundtrip_mismatch_sanitized.dbc -f
+specgo val specgo_output/output/template_roundtrip_mismatch_sanitized.ir.yaml
+specgo rt \
+  --ir-glob specgo_output/output/template_roundtrip_mismatch_sanitized.ir.yaml \
+  --artifact-dir examples/roundtrip_mismatch_artifacts \
+  -n 1 -c 2 --stop-on-fail
+```
+
+Expected result: roundtrip run exits with `FAILED` and writes error reports.
+
+Note: generated reports may contain local absolute paths; keep runtime outputs out of git.
 
 ## CLI Commands
 

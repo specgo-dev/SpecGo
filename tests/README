@@ -1,0 +1,30 @@
+SpecGo sanitized example templates (no external proprietary payloads):
+
+- `template_valid_sanitized.dbc`
+  - Expected: `specgo ing` + `specgo val` pass.
+- `template_invalid_semantic_sanitized.dbc`
+  - Expected: ingest passes, but `specgo val` fails at Layer-1 semantic check
+    (`scale is 0`).
+- `template_broken_parser_demo.c`
+  - Intentionally invalid C syntax for parser/compile-failure demos.
+- `template_roundtrip_mismatch_sanitized.dbc`
+  - Expected: ingest/validate pass.
+  - Use with `roundtrip_mismatch_artifacts/` to trigger deterministic
+    encode/decode mismatch failures in roundtrip tests.
+
+Quick checks:
+
+```bash
+specgo ing examples/template_valid_sanitized.dbc -f
+specgo val specgo_output/output/template_valid_sanitized.ir.yaml
+
+specgo ing examples/template_invalid_semantic_sanitized.dbc -f
+specgo val specgo_output/output/template_invalid_semantic_sanitized.ir.yaml
+
+specgo ing examples/template_roundtrip_mismatch_sanitized.dbc -f
+specgo val specgo_output/output/template_roundtrip_mismatch_sanitized.ir.yaml
+specgo rt \
+  --ir-glob specgo_output/output/template_roundtrip_mismatch_sanitized.ir.yaml \
+  --artifact-dir examples/roundtrip_mismatch_artifacts \
+  -n 1 -c 2 --stop-on-fail
+```

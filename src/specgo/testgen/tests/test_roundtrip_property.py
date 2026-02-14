@@ -78,7 +78,7 @@ def _compile_shared_library(source_path: Path, include_dir: Path, output_path: P
     if _is_msvc(COMPILER):
         cmd = [
             COMPILER, "/LD", "/std:c11", "/W4", "/WX",
-            str(source_path), f"/I{include_dir}", f"/Fe:{output_path}",
+            str(source_path), f"/I{include_dir}", "/link", f"/OUT:{output_path}",
         ]
         proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
         if proc.returncode == 0:

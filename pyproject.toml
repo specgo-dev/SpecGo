@@ -4,8 +4,37 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SpecGo"
-version = "0.0.1"
+version = "1.0.0"
+authors = [
+  { name="Ce Xu", email="dylanalexxc@gmail.com" },
+]
 description = "CLI-first spec-to-API agent for embedded protocols."
+keywords = [
+  "embedded",
+  "protocol",
+  "can",
+  "dbc",
+  "codegen",
+  "code-generation",
+  "validation",
+  "testing",
+  "property-testing",
+  "toolchain",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Software Development :: Testing",
+  "Topic :: System :: Hardware :: Hardware Drivers",
+]
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
@@ -21,7 +50,20 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["specgo"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["specgo", "specgo.*"]
+
+[tool.setuptools.package-data]
+specgo = [
+  "codegen/templates/README.md",
+  "codegen/templates/c/*.j2",
+  "llm/prompts/*.md",
+]
 
 [project.scripts]
 specgo = "specgo.__main__:run"
+
+[project.urls]
+Homepage = "https://github.com/specgo-dev/SpecGo"
