@@ -9,7 +9,7 @@ README = (ROOT / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="SpecGo",
-    version="1.0.0",
+    version="1.0.1",
     description="CLI-first spec-to-API agent for embedded protocols.",
     keywords=[
         "embedded",

@@ -54,7 +54,7 @@ Protocol implementations (encoder/decoder, bit packing, endianness) are error-pr
 
 ## Update Log
 
-### v1.0.0 (2026-02-14) - First Stable Release
+### v1.0.1 (2026-03-12) - First Stable Release
 
 - First public stable release of SpecGo.
 - End-to-end deterministic pipeline available: `ing` -> `val` -> `gen` -> `gate` -> `rt`.
@@ -66,7 +66,21 @@ Protocol implementations (encoder/decoder, bit packing, endianness) are error-pr
 ## Quickstart
 
 ```bash
+pip install -U pip
+pip install typer pyyaml pydantic cantools jinja2
+pip install -U typer pyyaml pydantic cantools jinja2
+```
+
+```bash
+pip install -i https://test.pypi.org/simple/ SpecGo
+pip install SpecGo
+```
+
+```bash
 pip install -e .
+```
+
+```bash
 specgo start
 specgo --help
 ```
